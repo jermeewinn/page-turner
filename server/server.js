@@ -7,8 +7,6 @@ const path = require('path');
 // Import typeDefs & resolvers, get rid of routes
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
-const { authMiddleware } = require('./utils/auth');
-
 
 const app = express();
 const PORT = process.env.PORT || 3001;
