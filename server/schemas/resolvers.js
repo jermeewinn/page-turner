@@ -7,7 +7,7 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        // Me query
+        // Me query/GET me
         me: async (parent, args, context) => {
             if (context.user) {
                 const userData = await User.findOne({})
@@ -19,17 +19,31 @@ const resolvers = {
         }
     },
     Mutation: {
-        // User login
-        login: async (parent { email, password }) => {
+        // User login mutation
+        login: async (parent, { email, password }) => {
+            // Find user by email. If not user, then throw AuthenticationError
             const user = await User.findOne({ email });
-            if(!user) {
-                throw new AuthenticationError('No user found');
+            if (!user) {
+                throw new AuthenticationError('Incorrect credentials');
             }
-        },
-        addUser: {
 
+            // Check if pw is coorect. If pw is not correct, throw AuthenticationError
+            const correctPw = await user.isCorrectPassword(password);
+            if (!correctPw) {
+                throw new AuthenticationError('Incorrect credentials');
+            }
+            
+            // Assign token
+            const token = signToken(user);
+            return { token, user };
         },
-        saveBook: {
+        // User sign up mutation
+        addUser: async (parent, args) => {
+            const user = await User.create(args);
+            const token = signToken(user);
+            return { token, user };
+        },
+        saveBook: async (parent, { book }, context) {
 
         },
         removeBook: {
