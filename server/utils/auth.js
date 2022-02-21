@@ -30,7 +30,7 @@ module.exports = {
       console.log('Invalid token');
     }
 
-    // send to next endpoint
+    // Return updated request object
     return req;
   },
   signToken: function ({ username, email, _id }) {
