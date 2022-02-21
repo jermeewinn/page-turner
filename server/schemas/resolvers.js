@@ -43,13 +43,31 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        saveBook: async (parent, { book }, context) {
-
+        // Saves books on the front-end to savedBooks list
+        saveBook: async (parent, { book }, context) => {
+            // saveBook structure similar to addFriend and addReaction in module content
+            if (context.user) {
+                const updateBook = await User.findByIdAndUpdate(
+                    { _id: context.user._id },
+                    { $push: { savedBooks: book }},
+                    { new: true }
+                );
+                return updateBook;
+            }
+            throw new AuthenticationError()
         },
-        removeBook: {
-
+        // Deletes books on the front-end from savedBooks list
+        removeBook: async (parent, { bookId }, context) => {
+            if (context.user) {
+                const userData = await User.findByIdAndDelete(
+                    { _id: context.user._id },
+                    { $pull: {savedBooks: bookId }},
+                    { new: true }
+                );
+                return userData;
+            } 
         }
-    },
+    }
 
 };
 
