@@ -1,6 +1,4 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { saveBook } = require("../controllers/user-controller");
-//NOTE TO SELF: will need to get rid of const { saveBook } eventually
 const { User } = require("../models");
 const { signToken } = require('../utils/auth');
 
@@ -45,7 +43,7 @@ const resolvers = {
         },
         // Saves books on the front-end to savedBooks list
         saveBook: async (parent, { book }, context) => {
-            // saveBook structure similar to addFriend and addReaction in module content
+            // Find book by Id, and $push saves book to savedBooks array
             if (context.user) {
                 const updateBook = await User.findByIdAndUpdate(
                     { _id: context.user._id },
@@ -58,6 +56,7 @@ const resolvers = {
         },
         // Deletes books on the front-end from savedBooks list
         removeBook: async (parent, { bookId }, context) => {
+            // Find book by Id, and $pull removes saved book from savedBooks array
             if (context.user) {
                 const userData = await User.findByIdAndDelete(
                     { _id: context.user._id },
