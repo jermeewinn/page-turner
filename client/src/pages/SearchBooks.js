@@ -35,7 +35,7 @@ const SearchBooks = () => {
 
     try {
       // NOTE TO SELF: searchGoogleBooks needs to be replaced with a GraphQL mutation call
-      const response = await searchGoogleBooks(searchInput);
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -72,7 +72,10 @@ const SearchBooks = () => {
 
     try {
       // NOTE TO SELF: saveBook from API needs to be replaced with GraphQL mutation call
-      const response = await saveBook(bookToSave, token);
+      const response = await saveBook(
+        { 
+          variables: {bookData: { ...bookToSave } }, 
+        });
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -80,8 +83,8 @@ const SearchBooks = () => {
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
-    } catch (err) {
-      console.error(err);
+    } catch (e) {
+      console.error(e);
     }
   };
 
