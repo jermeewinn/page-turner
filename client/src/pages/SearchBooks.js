@@ -26,7 +26,7 @@ const SearchBooks = () => {
   });
 
   // create method to search for books and set state on form submit
-  const handleFormSubmit = async (event) => {``
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     if (!searchInput) {
@@ -35,7 +35,7 @@ const SearchBooks = () => {
 
     try {
       // NOTE TO SELF: searchGoogleBooks needs to be replaced with a GraphQL mutation call
-      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
+      const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
