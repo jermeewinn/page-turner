@@ -20,13 +20,10 @@ const SavedBooks = () => {
       return false;
     }
     try {
-      const response = await deleteBook({ variables: { bookId }})
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-      // const updatedUser = await response.json();
-      // setUserData(updatedUser);
-      // upon success, remove book's id from localStorage
+      await deleteBook({ 
+        variables: { bookId },
+        refetchQueries: [{ query: GET_ME }]
+      })
       removeBookId(bookId);
     } catch (err) {
       console.error(err);
